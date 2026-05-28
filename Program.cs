@@ -1,8 +1,9 @@
 ﻿
-using Model;
-using View;
 using Controller;
+using Model;
+using System.Text;
 using System.Text.RegularExpressions;
+using View;
 
 
 
@@ -18,6 +19,8 @@ class Program
 
     static void Main()
     {
+        Console.OutputEncoding = Encoding.UTF8;
+        Console.InputEncoding = Encoding.UTF8;
         string mazeText = @"
 xxxxxx1xxxxxxxxxxxxxxxxxxxxxxx.
  x   x   x                    .
