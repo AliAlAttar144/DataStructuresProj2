@@ -1,8 +1,9 @@
 ﻿
-using Model;
-using View;
 using Controller;
+using Model;
+using System.Text;
 using System.Text.RegularExpressions;
+using View;
 
 
 
@@ -18,6 +19,10 @@ class Program
 
     static void Main()
     {
+        Console.OutputEncoding = Encoding.UTF8;
+        Console.InputEncoding = Encoding.UTF8;
+
+
         string mazeText = @"
 xxxxxx1xxxxxxxxxxxxxxxxxxxxxxx.
  x   x   x                    .
@@ -51,15 +56,6 @@ xx            xx            xx.";
         MenuController menuController = new MenuController(maze, view, timeInterval);
         ConsoleKey key;
         bool resp = true;
-
-        //----Refresh for visualization reason----
-        int i = 0;
-        while (i <= 4)
-        {
-          StartMenu(maze, view);           
-          i++;
-        }
-        //----------------------------------------
 
         while (resp)
         {

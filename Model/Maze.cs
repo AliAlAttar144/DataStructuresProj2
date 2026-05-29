@@ -17,9 +17,9 @@ namespace Model
             new int[] {  0,  1 },  //right
             };
         
-        public Maze() => GenerateMaze();
+        public Maze(int rows, int cols) => GenerateMaze(rows, cols);
         public Maze(bool automatic = true) {if(automatic) GenerateMaze(); else GenerateFromText(MazeGrids.mazeText);}
-        public Maze(int rows, int cols) {if(rows <= 0 && cols <= 0) GenerateFromText(MazeGrids.mazeText); else GenerateMaze(rows, cols);}
+        //public Maze(int rows, int cols) {if(rows <= 0 && cols <= 0) GenerateFromText(MazeGrids.mazeText); else GenerateMaze(rows, cols);}
         public Maze(string lines) => GenerateFromText(lines);
 
         void GenerateFromText(string lines){
@@ -33,10 +33,67 @@ namespace Model
             if(rows % 2 != 0) {rows++;}
             if(cols % 2 != 0) {cols++;}
 
-            //ToDo...
+            MazeMDArray = new int[rows, cols];
+            var random = Random.Shared;
 
-            GenerateFromText(MazeGrids.mazeText); //remove this line and implement the task
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < cols; col++)
+                {
+                    MazeMDArray[row, col] = -1;
+                }
+            }
+
+            for (int row = 1; row < rows - 1; row += 2)
+            {
+                for (int col = 1; col < cols - 1; col += 2)
+                {
+                    MazeMDArray[row, col] = 0;
+
+                    var canCarveNorth = row > 1;
+                    var canCarveEast = col < cols - 2;
+
+                    if (!canCarveNorth && !canCarveEast)
+                    {
+                        continue;
+                    }
+
+                    var carveNorth = canCarveNorth && (!canCarveEast || random.Next(2) == 0);
+                    if (carveNorth)
+                    {
+                        MazeMDArray[row - 1, col] = 0;
+                    }
+                    else
+                    {
+                        MazeMDArray[row, col + 1] = 0;
+                    }
+                }
+            }
+
+            var beginRow = rows - 2;
+            if (beginRow % 2 == 0) beginRow--;
+
+            var endCol = cols - 2;
+            if (endCol % 2 == 0) endCol--;
+
+            Begin = [beginRow, 1];
+            End = [1, endCol];
+
+            MazeMDArray[Begin[0], Begin[1]] = 1;
+            MazeMDArray[End[0], End[1]] = 2;
+
+            MazeArray = new int[rows][];
+            for (int row = 0; row < rows; row++)
+            {
+                MazeArray[row] = new int[cols];
+                for (int col = 0; col < cols; col++)
+                {
+                    MazeArray[row][col] = MazeMDArray[row, col];
+                }
+            }
         }
+
+
 
         int[][] ToMazeArray(string maze)
         {
