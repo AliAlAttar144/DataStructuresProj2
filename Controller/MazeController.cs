@@ -94,7 +94,6 @@ namespace Controller
             }
             //Algorithms part of Controller:
             else{
-                _view.DisplayMaze(_maze);
                 var visitedPositions = new Queue<int[]>();
                 _pathFinder.FindPath(_maze, _maze.Begin, visitedPositions);
                 bool success = visitedPositions.ToList().Last()[0] == _maze.End[0] && visitedPositions.ToList().Last()[1] == _maze.End[1];

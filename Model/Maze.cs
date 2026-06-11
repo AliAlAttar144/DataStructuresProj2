@@ -10,28 +10,29 @@ namespace Model
         public int[] Begin { get; private set; }
         public int[] End { get; private set; }
 
-        public readonly int[][] moves = {           
+        public readonly int[][] moves = {
             new int[] {  1,  0 },  //down
             new int[] { -1,  0 },  //up
             new int[] {  0, -1 },  //left
             new int[] {  0,  1 },  //right
             };
-        
+
         public Maze(int rows, int cols) => GenerateMaze(rows, cols);
-        public Maze(bool automatic = true) {if(automatic) GenerateMaze(); else GenerateFromText(MazeGrids.mazeText);}
+        public Maze(bool automatic = true) { if (automatic) GenerateMaze(); else GenerateFromText(MazeGrids.mazeText); }
         //public Maze(int rows, int cols) {if(rows <= 0 && cols <= 0) GenerateFromText(MazeGrids.mazeText); else GenerateMaze(rows, cols);}
         public Maze(string lines) => GenerateFromText(lines);
 
-        void GenerateFromText(string lines){
+        void GenerateFromText(string lines)
+        {
             MazeArray = ToMazeArray(lines);
             MazeMDArray = ToMazeMDArray(lines);
         }
 
         void GenerateMaze(int rows = 20, int cols = 40)
         {
-            if(rows < 4 || cols < 4) {rows = 20; cols = 40;}
-            if(rows % 2 != 0) {rows++;}
-            if(cols % 2 != 0) {cols++;}
+            if (rows < 4 || cols < 4) { rows = 20; cols = 40; }
+            if (rows % 2 != 0) { rows++; }
+            if (cols % 2 != 0) { cols++; }
 
             MazeMDArray = new int[rows, cols];
             var random = Random.Shared;
@@ -134,7 +135,7 @@ namespace Model
             }
 
             return outArray;
-            
+
         }
 
         int[,] ToMazeMDArray(string maze)
@@ -147,15 +148,15 @@ namespace Model
             if (arrayLines != null && arrayLines.Length > 0)
                 lineLength = arrayLines[0].Length;
             else
-            throw new Exception($"Maze incorrect");
-            
+                throw new Exception($"Maze incorrect");
+
             for (var rowIdx = 0; arrayLines != null && rowIdx < arrayLines.Length; rowIdx++)
             {
                 var line = arrayLines[rowIdx];
                 if (arrayLines[rowIdx] == null || line.Length != lineLength)
                     throw new Exception($"Not same line length for rows in maze:\n at row 0: {lineLength}, at row {rowIdx}: {line.Length}");
             }
-            
+
             int[,] outArray = new int[arrayLines.Length, lineLength];
 
             for (var rowIdx = 0; rowIdx < arrayLines.Length; rowIdx++)
@@ -220,10 +221,10 @@ namespace Model
                     && !(newRow >= array.Length)
                     && !(newColumn >= array[newRow].Length);
         }
-        
+
         // Make sure the position is within the maze array bounds.
         // no walls
-        public bool IsValidMove(int newRow, int newColumn) => 
+        public bool IsValidMove(int newRow, int newColumn) =>
             IsValidPos(MazeArray, newRow, newColumn) &&
             !(MazeArray[newRow][newColumn] == -1); //no walls 
 
@@ -239,12 +240,12 @@ namespace Model
                     IsValidPos(MazeArray, newRow, newColumn) &&
                     !(MazeArray[newRow][newColumn] == -1 || MazeArray[newRow][newColumn] == 4); //no walls, not yet visited 
         }
-        
+
     }
 
     public static class MazeGrids
     {
-      public static string mazeText = @"
+        public static string mazeText = @"
 xxxxxx1xxxxxxxxxxxxxxxxxxxxxxx.
  x   x   x                    .
 xx2x xxx   x xxxxxxxx    x xx .
